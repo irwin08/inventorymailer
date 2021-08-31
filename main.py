@@ -10,6 +10,7 @@ from email import encoders
 from datetime import datetime
 from datetime import timedelta
 import time
+import math
 
 #skus to check
 def load_skus():
@@ -65,19 +66,22 @@ def execute():
 
     skus = load_skus()
 
+    SAVER = 0.7
 
     report = []
 
     for sku in skus:
         available = api.getAvailability(sku)
-        if available > 2:
-            report.append([sku, available])
+        true_available = math.floor(available * SAVER)
+        description = api.getDescriptionOfSku(sku)
+        if true_available > 2:
+            report.append([sku, description, true_available])
 
     print(report)
 
     with open('report.csv', 'w') as csvfile:
         report_writer = csv.writer(csvfile)
-        report_writer.writerow(['SKU', 'Quantity'])
+        report_writer.writerow(['SKU', 'Description', 'Quantity'])
         for row in report:
             report_writer.writerow(row)
 

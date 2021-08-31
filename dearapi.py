@@ -50,6 +50,11 @@ class dearapi:
         req = requests.get(self._url("ref/productavailability"), params={'Category':'DOT Full Face Helmet', 'Page' : page},  headers=self._headers)
         return req.json()
 
+    def getDescriptionOfSku(self, sku):
+        self.check_limit()
+        req = requests.get(self._url('/product'), params={'Sku' : sku}, headers=self._headers)
+        return req.json()['Products'][0]['Name']
+
 
     @sleep_and_retry
     @limits(calls=40, period=60)
