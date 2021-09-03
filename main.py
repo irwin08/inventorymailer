@@ -15,17 +15,18 @@ import math
 #skus to check
 def load_skus():
     skus = []
-    with open('dummy.csv') as csvfile:
+    with open('holeshot.csv') as csvfile:
         csv_reader = csv.reader(csvfile)
+        next(csv_reader, None)
         for row in csv_reader:
-            skus.append(row[0])
+            skus.append(row[2])
     return skus
 
 def send_email(to_address, password):
     SUBJECT = 'Test Inventory Report'
     FILENAME = 'report.csv'
     FILEPATH = './report.csv'
-    MY_EMAIL = 'jesse@vossdot.com'
+    MY_EMAIL = 'alejandro@vossdot.com'
     MY_PASSWORD = password
     TO_EMAIL = to_address
     SMTP_SERVER = 'smtp.gmail.com'
@@ -76,6 +77,8 @@ def execute():
         description = api.getDescriptionOfSku(sku)
         if true_available > 2:
             report.append([sku, description, true_available])
+        else:
+            report.append([sku, description, 0])
 
     print(report)
 
@@ -99,7 +102,7 @@ if __name__ == '__main__':
 
     while True:
         #change to days=7 when time is known for weekly updates
-        run_at = now + timedelta(minutes=5)
+        run_at = now + timedelta(days=7)
         delay = (run_at - now).total_seconds()
         time.sleep(delay)
         execute()

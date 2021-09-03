@@ -53,6 +53,9 @@ class dearapi:
     def getDescriptionOfSku(self, sku):
         self.check_limit()
         req = requests.get(self._url('/product'), params={'Sku' : sku}, headers=self._headers)
+        print(req.status_code)
+        print(req.content)
+        print(sku)
         return req.json()['Products'][0]['Name']
 
 
